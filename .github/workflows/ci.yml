@@ -18,3 +18,17 @@ jobs:
 
       - name: List Files
         run: ls -la
+
+      - name: Notify Slack - Success
+        if: success()
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data '{"text":"✅ Build Successful for devops-webapp"}' \
+          ${{ secrets.SLACK_WEBHOOK }}
+
+      - name: Notify Slack - Failure
+        if: failure()
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data '{"text":"❌ Build Failed for devops-webapp"}' \
+          ${{ secrets.SLACK_WEBHOOK }}
